@@ -1,20 +1,16 @@
-# Security notes
+# Security Policy and Threat Model
 
-## Threat model
+## Threat Model
 
-`github.com/Trysac/u157-dockerfile-audit` is a pure library without I/O. The main risks are:
+`dockerfileaudit` is designed to parse Dockerfile content which may be sourced from untrusted user uploads or external repositories.
 
-- **Supply chain**: a compromised dependency or CI action. Mitigation: standard library only,
-  `go.sum` verification, `govulncheck` in the local gates, Dependabot weekly updates, actions
-  pinned by commit SHA, minimal workflow permissions.
-- **Leaked secrets**: tokens committed by mistake. Mitigation: `gitleaks` runs in the local gates
-  and in CI; `.env` files are git-ignored.
-- **Untrusted input**: callers may pass hostile strings. Mitigation: validate input and return
-  explicit errors; never use `unsafe` or `os/exec` with untrusted data.
+### Defended
 
-## Publishing
+- **Denial of Service**: The parser enforces a maximum input size of 1 MiB. Exceeding this limit returns `ErrInputTooLarge`, preventing excessive memory allocation.
+- **Secret Exposure**: Rule DF005 inspects `ENV` and `ARG` for sensitive names (e.g., PASSWORD, API_KEY). The diagnostic output reveals only the variable name, ensuring the secret value itself is never logged or emitted in text/JSON reports.
+- **Deterministic Execution**: Auditing and parsing are purely in-memory operations with no network or subprocess invocation.
 
-Releases are git tags served through the Go module proxy and checksum database. No registry token
-is stored in the repository.
+### Not Defended
 
-To report a vulnerability, see [SECURITY.md](../SECURITY.md).
+- **Complex Shell Obfuscation**: The parser identifies patterns for `curl` piped to shell but does not emulate shell execution; highly obfuscated scripts may evade detection.
+- **Heredoc Content**: The current implementation skips heredoc bodies (`<<EOF`), meaning commands inside them are not analyzed.

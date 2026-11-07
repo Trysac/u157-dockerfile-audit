@@ -9,4 +9,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add dockerfile-audit library and CLI with DF001-DF009 security rules, inline suppression, and JSON/text reporting.
 - Initial project structure from the factory utility template.
