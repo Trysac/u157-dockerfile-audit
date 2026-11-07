@@ -1,0 +1,16 @@
+# dockerfile-audit
+
+> Audit Dockerfiles for security mistakes with nine rules: unpinned bases, root user, remote ADD, secrets in ENV or ARG, curl piped to shell and more, with text and JSON output Go module `github.com/Trysac/u157-dockerfile-audit`, package `dockerfileaudit`, MIT licensed,
+> Go >= 1.23, standard library only.
+
+## Docs
+
+- [README](README.md): problem, install, usage example
+- [AGENTS](AGENTS.md): commands, folder map, conventions, limits
+- [Architecture](docs/ARCHITECTURE.md): shape of the package and its public API
+- [Testing](docs/TESTING.md): how to run and extend the tests
+
+## Optional
+
+- [Stack](docs/STACK.md): tools used and discarded
+- [Changelog](CHANGELOG.md): release history
